@@ -2,6 +2,12 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import Badge from '../ui/Badge';
 
+const modeStyles = {
+  commit: { accent: 'amber', bg: 'bg-amber/10', text: 'text-amber', badge: 'amber' },
+  explore: { accent: 'coral', bg: 'bg-coral/10', text: 'text-coral', badge: 'coral' },
+  surprise: { accent: 'near-black', bg: 'bg-near-black/5', text: 'text-near-black', badge: 'gray' },
+};
+
 export default function Sidebar() {
   const { user, logout } = useAuth();
   const loc = useLocation();
@@ -10,6 +16,8 @@ export default function Sidebar() {
   const initials = user?.name ? user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : '?';
   const isActive = (path) => loc.pathname === path;
   const isHash = (h) => loc.pathname === '/dashboard' && loc.hash === h;
+  const uMode = user?.mode || '';
+  const ms = modeStyles[uMode] || modeStyles.commit;
 
   const links = [
     { path: '/dashboard', label: 'Overview' },
@@ -18,15 +26,15 @@ export default function Sidebar() {
     { path: '/profile', label: 'Profile' },
   ];
 
-  const modeColor = user?.mode === 'commit' ? 'amber' : user?.mode === 'explore' ? 'coral' : 'gray';
-
   return (
     <>
       <aside className="hidden md:flex flex-col w-[280px] min-h-screen bg-cream-light border-r border-border p-8 pt-24 fixed left-0 top-0">
         <div className="flex flex-col items-center mb-8">
-          <div className="w-14 h-14 rounded-full bg-amber text-white flex items-center justify-center font-body font-bold text-lg">{initials}</div>
+          <div className={`w-14 h-14 rounded-full ${uMode ? ms.bg : 'bg-amber'} text-near-black flex items-center justify-center font-body font-bold text-lg border-2 ${ms.accent === 'near-black' ? 'border-near-black/30' : `border-${ms.accent}/30`}`}>
+            {initials}
+          </div>
           <h3 className="font-display text-[1.1rem] text-near-black mt-3">{user?.name || 'User'}</h3>
-          {user?.mode && <Badge color={modeColor} className="mt-1.5">{user.mode}</Badge>}
+          {uMode && <Badge color={ms.badge} className="mt-1.5">{uMode.charAt(0).toUpperCase() + uMode.slice(1)}</Badge>}
         </div>
         <hr className="border-border mb-6" />
         <nav className="flex flex-col gap-0.5">
