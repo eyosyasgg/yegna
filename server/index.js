@@ -26,8 +26,12 @@ app.use('/api/checkins', checkinRoutes);
 app.use('/api/goals', goalRoutes);
 app.use('/api/badges', badgeRoutes);
 
-initDB().then(() => {
-  app.listen(PORT, () => {
-    console.log(`Yegna server running on port ${PORT}`);
+if (process.env.VERCEL !== '1') {
+  initDB().then(() => {
+    app.listen(PORT, () => {
+      console.log(`Yegna server running on port ${PORT}`);
+    });
   });
-});
+}
+
+export default app;
