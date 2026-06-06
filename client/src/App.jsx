@@ -1,5 +1,4 @@
 import React from 'react';
-import './styles/index.css';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { useAuth } from './hooks/useAuth';
@@ -11,6 +10,9 @@ import Register from './pages/Register';
 import Login from './pages/Login';
 import Onboarding from './pages/Onboarding';
 import Dashboard from './pages/Dashboard';
+import Commit from './pages/Commit';
+import Explore from './pages/Explore';
+import Surprise from './pages/Surprise';
 import Profile from './pages/Profile';
 import NotFound from './pages/NotFound';
 
@@ -59,6 +61,9 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/onboarding" element={<AuthGuard><Onboarding /></AuthGuard>} />
               <Route path="/dashboard" element={<AuthGuard><Dashboard /></AuthGuard>} />
+              <Route path="/commit" element={<AuthGuard><Commit /></AuthGuard>} />
+              <Route path="/explore" element={<AuthGuard><Explore /></AuthGuard>} />
+              <Route path="/surprise" element={<AuthGuard><Surprise /></AuthGuard>} />
               <Route path="/profile" element={<AuthGuard><Profile /></AuthGuard>} />
               <Route path="/404" element={<NotFound />} />
               <Route path="*" element={<Navigate to="/404" replace />} />
