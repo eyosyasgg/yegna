@@ -35,7 +35,7 @@ router.get('/', authenticate, async (req, res) => {
 
       result.push({
         ...g,
-        interests: g.interests ? JSON.parse(g.interests) : [],
+        interests: g.interests ? (typeof g.interests === 'string' ? JSON.parse(g.interests) : g.interests) : [],
         matched: !!match,
         daysActive,
         partner: match ? {
@@ -59,10 +59,12 @@ router.post('/', authenticate, async (req, res) => {
 
     if (!mode) return res.status(400).json({ success: false, error: 'Mode is required' });
 
+    const nvl = (v, d) => (v !== undefined && v !== null && v !== '' ? v : d);
+
     const { rows: goals } = await pool.query(
       `INSERT INTO goals (user_id, mode, category, description, duration_days, daily_commitment, location, date_from, date_to, interests, openness_level)
        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) RETURNING *`,
-      [userId, mode, category || '', description || '', duration_days || 0, daily_commitment || '', location || '', date_from || '', date_to || '', JSON.stringify(interests || []), openness_level || 3]
+      [userId, mode, category || '', description || '', duration_days || 0, daily_commitment || '', location || '', nvl(date_from, null), nvl(date_to, null), JSON.stringify(interests || []), openness_level || 3]
     );
     const goal = goals[0];
 
@@ -89,7 +91,7 @@ router.post('/', authenticate, async (req, res) => {
 
     res.status(201).json({
       success: true,
-      data: { goal: { ...goal, interests: goal.interests ? JSON.parse(goal.interests) : [] }, matched, partner },
+      data: { goal: { ...goal, interests: goal.interests ? (typeof goal.interests === 'string' ? JSON.parse(goal.interests) : goal.interests) : [] }, matched, partner },
     });
   } catch (err) {
     console.error(err);
@@ -113,7 +115,7 @@ router.get('/suggestions', authenticate, async (req, res) => {
       [mode, userId]
     );
 
-    res.json({ success: true, data: rows.map(r => ({ ...r, interests: r.interests ? JSON.parse(r.interests) : [] })) });
+    res.json({ success: true, data: rows.map(r => ({ ...r, interests: r.interests && typeof r.interests === 'string' ? JSON.parse(r.interests) : r.interests || [] })) });
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, error: 'Server error' });
@@ -133,7 +135,7 @@ router.get('/surprise', authenticate, async (req, res) => {
       [userId]
     );
 
-    res.json({ success: true, data: rows.map(r => ({ ...r, interests: r.interests ? JSON.parse(r.interests) : [] })) });
+    res.json({ success: true, data: rows.map(r => ({ ...r, interests: r.interests && typeof r.interests === 'string' ? JSON.parse(r.interests) : r.interests || [] })) });
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, error: 'Server error' });

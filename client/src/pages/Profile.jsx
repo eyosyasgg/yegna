@@ -61,7 +61,7 @@ export default function Profile() {
     <div className="min-h-screen bg-cream">
       <BottomNav />
       <div className="md:ml-[200px] pt-6 pb-24 md:pb-8">
-        <div className="max-w-[800px] mx-auto px-6">
+        <div className="max-w-[800px] mx-auto px-6 animate-slideUp">
           <Card>
             <div className="flex flex-col md:flex-row items-start gap-6">
               <div className="w-20 h-20 rounded-full bg-amber/20 text-near-black flex items-center justify-center font-display text-[1.75rem] flex-shrink-0 border-2 border-amber/30">

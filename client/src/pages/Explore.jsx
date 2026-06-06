@@ -89,10 +89,10 @@ export default function Explore() {
           )}
 
           {loading ? <Spinner className="py-12" /> : (
-            <>
+            <div className="animate-slideUp">
               {goals.length > 0 ? (
                 <div className="grid sm:grid-cols-2 gap-4 mb-10">
-                  {goals.map((g) => <CommitmentCard key={g.id} goal={g} />)}
+                  {goals.map((g) => <div key={g.id} className="stagger-item"><CommitmentCard goal={g} /></div>)}
                 </div>
               ) : (
                 <div className="text-center py-12">
@@ -112,10 +112,12 @@ export default function Explore() {
               {filteredSuggestions.length > 0 ? (
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {filteredSuggestions.map((s) => (
-                    <SuggestionCard key={s.id} suggestion={s} onMatch={async () => {
-                      await createGoal({ mode: 'explore', category: s.category, location: s.location, date_from: s.date_from, date_to: s.date_to });
-                      fetchData();
-                    }} />
+                    <div key={s.id} className="stagger-item">
+                      <SuggestionCard suggestion={s} onMatch={async () => {
+                        await createGoal({ mode: 'explore', category: s.category, location: s.location, date_from: s.date_from, date_to: s.date_to });
+                        fetchData();
+                      }} />
+                    </div>
                   ))}
                 </div>
               ) : (
@@ -123,7 +125,7 @@ export default function Explore() {
                   {search ? 'No results found.' : 'No suggestions right now. Check back later!'}
                 </p>
               )}
-            </>
+            </div>
           )}
         </div>
       </div>

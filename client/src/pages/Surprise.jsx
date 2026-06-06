@@ -56,14 +56,14 @@ export default function Surprise() {
           </div>
 
           {loading ? <Spinner className="py-16" /> : (
-            <>
+            <div className="animate-slideUp">
               {suggestions.length > 0 ? (
                 <div className="flex flex-col gap-4">
                   {suggestions.map((s, i) => {
                     const mc = modeColors[s.mode] || modeColors.surprise;
                     const initials = s.user_name?.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || '?';
                     return (
-                      <Card key={s.id} className="relative overflow-hidden">
+                      <Card key={s.id} className="relative overflow-hidden stagger-item">
                         <div className={`absolute top-0 left-0 w-full h-1 ${mc.bg}`} />
                         <div className="flex items-start gap-4">
                           <div className="w-10 h-10 rounded-full bg-cream-light border border-border flex items-center justify-center font-display font-bold text-near-black text-lg flex-shrink-0">
@@ -98,7 +98,7 @@ export default function Surprise() {
               <div className="text-center mt-8">
                 <Button variant="secondary" onClick={refresh} disabled={loading}>Roll Again 🎲</Button>
               </div>
-            </>
+            </div>
           )}
         </div>
       </div>

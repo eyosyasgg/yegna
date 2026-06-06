@@ -90,10 +90,10 @@ export default function Commit() {
           )}
 
           {loading ? <Spinner className="py-12" /> : (
-            <>
+            <div className="animate-slideUp">
               {goals.length > 0 ? (
                 <div className="grid sm:grid-cols-2 gap-4 mb-10">
-                  {goals.map((g) => <CommitmentCard key={g.id} goal={g} onCheckin={() => navigate('/profile')} onView={() => navigate('/profile')} />)}
+                  {goals.map((g) => <div key={g.id} className="stagger-item"><CommitmentCard goal={g} onCheckin={() => navigate('/profile')} onView={() => navigate('/profile')} /></div>)}
                 </div>
               ) : (
                 <div className="text-center py-12 text-warm-glass">
@@ -113,10 +113,12 @@ export default function Commit() {
               {filteredSuggestions.length > 0 ? (
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {filteredSuggestions.map((s) => (
-                    <SuggestionCard key={s.id} suggestion={s} onMatch={async () => {
-                      await createGoal({ mode: 'commit', category: s.category, description: s.description, duration_days: s.duration_days, daily_commitment: s.daily_commitment });
-                      fetchData();
-                    }} />
+                    <div key={s.id} className="stagger-item">
+                      <SuggestionCard suggestion={s} onMatch={async () => {
+                        await createGoal({ mode: 'commit', category: s.category, description: s.description, duration_days: s.duration_days, daily_commitment: s.daily_commitment });
+                        fetchData();
+                      }} />
+                    </div>
                   ))}
                 </div>
               ) : (
@@ -124,7 +126,7 @@ export default function Commit() {
                   {search ? 'No results found.' : 'No suggestions right now. Check back later!'}
                 </p>
               )}
-            </>
+            </div>
           )}
         </div>
       </div>

@@ -52,7 +52,7 @@ router.post('/', authenticate, async (req, res) => {
 
     res.status(201).json({
       success: true,
-      data: { matched, partner, goal: { ...goal, interests: goal.interests ? JSON.parse(goal.interests) : [] } },
+      data: { matched, partner, goal: { ...goal, interests: goal.interests ? (typeof goal.interests === 'string' ? JSON.parse(goal.interests) : goal.interests) : [] } },
     });
   } catch (err) {
     console.error(err);

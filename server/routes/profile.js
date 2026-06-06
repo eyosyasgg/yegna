@@ -39,7 +39,7 @@ router.get('/', authenticate, async (req, res) => {
       success: true,
       data: {
         user: users[0],
-        goals: goals.map(g => ({ ...g, interests: g.interests ? JSON.parse(g.interests) : [] })),
+        goals: goals.map(g => ({ ...g, interests: g.interests ? (typeof g.interests === 'string' ? JSON.parse(g.interests) : g.interests) : [] })),
         matches,
         totalCheckins: count[0].cnt,
         badges,
